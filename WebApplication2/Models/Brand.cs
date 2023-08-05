@@ -13,9 +13,11 @@
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), "Brand name must be at least three characters in length.");
                 }
+                _name = value;
             }
         }
 
         public HashSet<Laptop> Laptops = new HashSet<Laptop>();
+
     }
 }

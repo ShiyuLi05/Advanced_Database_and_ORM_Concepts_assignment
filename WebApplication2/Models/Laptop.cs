@@ -1,4 +1,5 @@
-﻿using System.Reflection.Metadata.Ecma335;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Reflection.Metadata.Ecma335;
 
 namespace WebApplication2.Models
 {
@@ -17,6 +18,7 @@ namespace WebApplication2.Models
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), "Laptop model name must be at least three characters in length.");
                 }
+                _model = value;
             }
         }
 
@@ -39,6 +41,10 @@ namespace WebApplication2.Models
         public int BrandId { get; set; }
         
         public Brand Brand { get; set; }
+
+        public HashSet<LaptopStore> LaptopStores { get; set; }
+
+        public Laptop() { }
     }
 
     public enum LaptopCondition
@@ -47,4 +53,5 @@ namespace WebApplication2.Models
         Refurbished,
         Rental
     }
+
 }
