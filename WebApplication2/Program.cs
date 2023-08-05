@@ -9,6 +9,7 @@ using static WebApplication2.Models.Store;
 using Microsoft.OpenApi.Extensions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -295,11 +296,26 @@ app.MapGet("/stores/province", (AssignmentContext db) =>
              .Select(group => new
              {
                  Province = group.Key.ToString(),
-                 StoreCount = group.Count()
+                 Stores = group.Select(s => new
+                 {
+                     StoreNumber = s.StoreNumber,
+                     StoreAddress = s.StreetNameAndNumber
+                 }).ToList(),
              })
              .ToList();
 
-        Dictionary<string,int> result = storesByProvince.ToDictionary(stores => stores.Province, stores => stores.StoreCount);
+        var result = new Dictionary<string, object>();
+
+        foreach (var provinceStores in storesByProvince)
+        {
+            var provinceInfo = new Dictionary<string, object>
+            {
+                { "province", provinceStores.Province },
+                { "stores", provinceStores.Stores }
+            };
+
+            result.Add(provinceStores.Province, provinceInfo);
+        }
 
         return Results.Ok(result);
     }
